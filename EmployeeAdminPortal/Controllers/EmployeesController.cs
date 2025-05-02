@@ -63,6 +63,52 @@ namespace EmployeeAdminPortal.Controllers
 
             return Ok(employeeEntity);
         }
-        
+
+        //4. Update an Employee
+        [HttpPut]
+        [Route("{id:guid}")]
+
+        public IActionResult UpdateEmployee (Guid id, UpdateEmployeeDto updateEmployeeDto)
+        {
+            var employee = dbContext.Employees.Find(id);
+
+            if (employee is null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                employee.Name = updateEmployeeDto.Name;
+                employee.Email = updateEmployeeDto.Email;
+                employee.PhoneNumber = updateEmployeeDto.PhoneNumber;
+                employee.Salary = updateEmployeeDto.Salary;
+
+                dbContext.SaveChanges();
+                return Ok(employee);
+            }
+        }
+
+        //5. Delete an Employee
+        [HttpDelete]
+        [Route("{id:guid}")]
+
+        public IActionResult DeleteEmployee (Guid id)
+        {
+            var employee = dbContext.Employees.Find(id);
+
+            if (employee is null)
+            {
+                return NotFound();
+            }
+
+            else
+            {
+                dbContext.Employees.Remove(employee);
+                dbContext.SaveChanges();
+
+                return Ok(employee);
+            }
+        }
+
     }
 }
